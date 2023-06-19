@@ -29,6 +29,15 @@ pipeline:
                     connectorRef: account.harnessImage
                   timeout: ""
                   type: Plugin
+              - step:
+                  type: Run
+                  name: Run_1
+                  identifier: Run_1
+                  spec:
+                    shell: Sh
+                    command: |-
+                      ls -altr
+                      ls -altr /shared || true
           platform:
             os: Linux
             arch: Amd64
@@ -37,5 +46,4 @@ pipeline:
             spec: {}
           sharedPaths:
             - /shared
-            - ""
         type: CI
