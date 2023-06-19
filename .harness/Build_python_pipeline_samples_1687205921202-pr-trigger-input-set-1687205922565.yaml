@@ -1,0 +1,14 @@
+inputSet:
+  name: Build_python_pipeline_samples_1687205921202-pr-trigger-input-set
+  identifier: Build_python_pipeline_samples_1687205921202prtriggerinputset
+  orgIdentifier: default
+  projectIdentifier: testFactory
+  pipeline:
+    identifier: Build_python_pipeline_samples_1687205921202
+    properties:
+      ci:
+        codebase:
+          build:
+            type: PR
+            spec:
+              number: <+trigger.prNumber>
