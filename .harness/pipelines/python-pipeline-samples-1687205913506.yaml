@@ -31,13 +31,32 @@ pipeline:
                   type: Plugin
               - step:
                   type: Run
-                  name: Run_1
+                  name: create Docker file
                   identifier: Run_1
                   spec:
                     shell: Sh
                     command: |-
-                      ls -altr
-                      ls -altr /shared || true
+                      touch pythondockerfile
+                      cat > pythondockerfile <<- EOM
+                      FROM python:3.10.6-alpine
+                      WORKDIR /python-pipeline-samples
+                      ADD . /python-pipeline-samples
+                      RUN pip install -r requirements.txt
+                      CMD ["python" , "app.py"]
+                      EOM
+                      cat pythondockerfile
+                    connectorRef: dockerConnect
+                    image: alpine
+              - step:
+                  type: BuildAndPushDockerRegistry
+                  name: BuildAndPushDockerRegistry_1
+                  identifier: BuildAndPushDockerRegistry_1
+                  spec:
+                    connectorRef: dockerConnect
+                    repo: spahuja/pythonsample
+                    tags:
+                      - latest
+                    dockerfile: pythondockerfile
           platform:
             os: Linux
             arch: Amd64
@@ -47,3 +66,39 @@ pipeline:
           sharedPaths:
             - /shared
         type: CI
+    - stage:
+        name: Integration test
+        identifier: Integration_test
+        type: CI
+        spec:
+          cloneCodebase: true
+          platform:
+            os: Linux
+            arch: Amd64
+          runtime:
+            type: Cloud
+            spec: {}
+          execution:
+            steps:
+              - step:
+                  type: Background
+                  name: python server
+                  identifier: python_server
+                  spec:
+                    connectorRef: dockerConnect
+                    image: python-pipeline-samples
+                    shell: Sh
+                    command: |
+                      python3 /python-pipeline-samples/app.py
+                  description: server connection
+              - step:
+                  type: Run
+                  name: test connection to server
+                  identifier: test_connection_to_server
+                  spec:
+                    connectorRef: dockerConnect
+                    image: curlimages/curl:7.73.0
+                    shell: Sh
+                    command: |-
+                      sleep 20
+                      curl localhost:5000
