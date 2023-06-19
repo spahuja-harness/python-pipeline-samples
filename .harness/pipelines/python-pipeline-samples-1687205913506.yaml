@@ -26,7 +26,7 @@ pipeline:
                       dry_run: "true"
                       repo: hello/world
                       tags: latest
-                    connectorRef: account.harnessImage
+                    connectorRef: dockerConnect
                   timeout: ""
                   type: Plugin
               - step:
