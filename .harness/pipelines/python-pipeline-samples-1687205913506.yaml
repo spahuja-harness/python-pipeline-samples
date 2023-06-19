@@ -26,7 +26,7 @@ pipeline:
                       dry_run: "true"
                       repo: hello/world
                       tags: latest
-                    connectorRef: dockerConnect
+                    connectorRef: account.harnessImage
                   timeout: ""
                   type: Plugin
               - step:
@@ -45,14 +45,14 @@ pipeline:
                       CMD ["python" , "app.py"]
                       EOM
                       cat pythondockerfile
-                    connectorRef: dockerConnect
+                    connectorRef: account.harnessImage
                     image: alpine
               - step:
                   type: BuildAndPushDockerRegistry
                   name: BuildAndPushDockerRegistry_1
                   identifier: BuildAndPushDockerRegistry_1
                   spec:
-                    connectorRef: dockerConnect
+                    connectorRef: account.harnessImage
                     repo: spahuja/pythonsample
                     tags:
                       - latest
@@ -85,7 +85,7 @@ pipeline:
                   name: python server
                   identifier: python_server
                   spec:
-                    connectorRef: dockerConnect
+                    connectorRef: account.harnessImage
                     image: python-pipeline-samples
                     shell: Sh
                     command: |
@@ -96,7 +96,7 @@ pipeline:
                   name: test connection to server
                   identifier: test_connection_to_server
                   spec:
-                    connectorRef: dockerConnect
+                    connectorRef: account.harnessImage
                     image: curlimages/curl:7.73.0
                     shell: Sh
                     command: |-
