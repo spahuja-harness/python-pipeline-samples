@@ -102,3 +102,12 @@ pipeline:
                     command: |-
                       sleep 20
                       curl localhost:5000
+              - step:
+                  type: BuildAndPushDockerRegistry
+                  name: BuildAndPushDockerRegistry_1
+                  identifier: BuildAndPushDockerRegistry_1
+                  spec:
+                    connectorRef: dockerConnect
+                    repo: pyImage
+                    tags:
+                      - latest
