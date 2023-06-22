@@ -107,7 +107,7 @@ pipeline:
                   name: BuildAndPushDockerRegistry_1
                   identifier: BuildAndPushDockerRegistry_1
                   spec:
-                    connectorRef: dockerConnect
+                    connectorRef: account.harnessImage
                     repo: pyImage
                     tags:
                       - latest
